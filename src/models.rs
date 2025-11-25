@@ -1,16 +1,24 @@
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Player {
     A,
     B,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Board {
     pub grid: [[Option<Player>; 3]; 3]
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Game {
+    pub board: Board,
+    pub current_player: Player,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub enum GameStatus {
     InProgress,
     Won(Player),
@@ -75,12 +83,6 @@ impl Board {
         }
         true
     }
-}
-
-#[derive(Debug)]
-pub struct Game {
-    pub board: Board,
-    pub current_player: Player,
 }
 
 impl Game {

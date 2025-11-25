@@ -1,5 +1,5 @@
 mod models;
-use models::{Player, Board, Game, GameStatus};
+use models::{Game, GameStatus};
 
 fn main() {
     let mut game = Game::new();
@@ -8,7 +8,10 @@ fn main() {
     game.make_move(1, 1);
     game.make_move(0, 1);
 
-    println!("Game state: {:?}", game);
-    println!("Game status: {:?}", game.get_status());
-    println!("Winner: {:?}", game.board.check_winner());
+    // Serialize to JSON
+    let json = serde_json::to_string_pretty(&game).unwrap();
+    println!("Game as JSON:\n{}", json);
+
+    let restored_game: Game = serde_json::from_str(&json).unwrap();
+    println!("\nRestored game: {:?}", restored_game);
 }
