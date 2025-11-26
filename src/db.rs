@@ -10,6 +10,27 @@ pub struct GameMoveRow {
     pub game_status: String, 
 }
 
+pub trait GameRepository {
+    fn insert_move(&mut self, row: GameMoveRow) -> Result<(), String>;
+}
+
+pub struct StubRepository {
+    pub moves: Vec<GameMoveRow>,
+}
+
+impl StubRepository {
+    pub fn new() -> Self {
+        StubRepository { moves: Vec::new() }
+    }
+}
+
+impl GameRepository for StubRepository {
+    fn insert_move(&mut self, row: GameMoveRow) -> Result<(), String> {
+        self.moves.push(row);
+        Ok(())
+    }
+}
+
 pub fn create_client() -> Client {
     Client::default()
         .with_url("http://localhost:8123")

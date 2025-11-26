@@ -114,3 +114,49 @@ impl Game {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_board_is_empty() {
+        let board = Board::new();
+        for row in 0..3 {
+            for col in 0..3 {
+                assert!(board.grid[row][col].is_none());
+            }
+        }
+    }
+
+    #[test]
+    fn test_place_move() {
+        let mut board = Board::new();
+        let result = board.place_move(0,0,Player::A);
+
+        assert!(result);
+        assert_eq!(board.grid[0][0], Some(Player::A));
+    }
+
+    #[test]
+    fn test_win_detection_row() {
+        let mut board = Board::new();
+        board.place_move(0,0,Player::A);
+        board.place_move(0,1,Player::A);
+        board.place_move(0,2,Player::A);
+
+        assert_eq!(board.check_winner(), Some(Player::A));
+    }
+
+    #[test]
+    fn test_game_switches_players() {
+        let mut game = Game::new();
+        assert_eq!(game.current_player, Player::A);
+
+        game.make_move(0,0);
+        assert_eq!(game.current_player, Player::B);
+
+        game.make_move(1,1);
+        assert_eq!(game.current_player, Player::A);
+    }
+}
